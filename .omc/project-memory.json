@@ -9,7 +9,7 @@
     "runtime": null
   },
   "build": {
-    "buildCommand": "npm run build 2>&1",
+    "buildCommand": "npx tsc --noEmit 2>&1 | head -20",
     "testCommand": null,
     "lintCommand": null,
     "devCommand": null,
@@ -35,8 +35,8 @@
   "hotPaths": [
     {
       "path": "src/App.tsx",
-      "accessCount": 19,
-      "lastAccessed": 1783435439554,
+      "accessCount": 22,
+      "lastAccessed": 1783435868342,
       "type": "file"
     },
     {
@@ -70,15 +70,15 @@
       "type": "file"
     },
     {
-      "path": "src/components/Board.tsx",
-      "accessCount": 6,
-      "lastAccessed": 1783435338677,
+      "path": "src/components/Header.tsx",
+      "accessCount": 7,
+      "lastAccessed": 1783435860871,
       "type": "file"
     },
     {
-      "path": "src/components/Header.tsx",
+      "path": "src/components/Board.tsx",
       "accessCount": 6,
-      "lastAccessed": 1783435393438,
+      "lastAccessed": 1783435338677,
       "type": "file"
     },
     {
@@ -160,6 +160,12 @@
       "type": "file"
     },
     {
+      "path": "src/components/LoginScreen.tsx",
+      "accessCount": 2,
+      "lastAccessed": 1783435843220,
+      "type": "file"
+    },
+    {
       "path": "manifest.json",
       "accessCount": 1,
       "lastAccessed": 1783430298273,
@@ -187,12 +193,6 @@
       "path": "README.md",
       "accessCount": 1,
       "lastAccessed": 1783434633463,
-      "type": "file"
-    },
-    {
-      "path": "src/components/LoginScreen.tsx",
-      "accessCount": 1,
-      "lastAccessed": 1783435331760,
       "type": "file"
     }
   ],

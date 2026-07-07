@@ -60,11 +60,9 @@ export default function App() {
   const [swappedCells, setSwappedCells] = useState<[Position, Position] | null>(null);
   const [clearingCells, setClearingCells] = useState<Position[]>([]);
   const processingRef = useRef(false);
-  const username = !isGuest ? getStoredUsername() : null;
-
   /* ── Login handlers ─────────────────────────── */
 
-  const handleLogin = useCallback((name: string) => {
+  const handleLogin = useCallback((_name: string) => {
     setIsGuest(false);
     setScreen('game');
     // Force re-read of username
