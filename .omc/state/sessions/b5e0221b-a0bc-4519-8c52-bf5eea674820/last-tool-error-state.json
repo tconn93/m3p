@@ -1,0 +1,7 @@
+{
+  "tool_name": "Bash",
+  "tool_input_preview": "{\"command\":\"npx tsc --noEmit 2>&1\",\"timeout\":30000,\"description\":\"Type-check after level system changes\"}",
+  "error": "Exit code 2\nsrc/App.tsx(1,23): error TS6133: 'useEffect' is declared but its value is never read.\nsrc/App.tsx(129,44): error TS2339: Property 'level' does not exist on type 'GameConfig'.\nsrc/components/Board.tsx(1,36): error TS2305: Module '\"../engine/game\"' has no exported member 'ROWS'.\nsrc/components/Board.tsx(1,42): error TS2305: Module '\"../engine/game\"' has no exported member 'COLS'.\nsrc/components/Overlay.tsx(11,86): error TS6133: 'onRetry' is declared but its value is never read.",
+  "timestamp": "2026-07-07T14:06:32.735Z",
+  "retry_count": 1
+}

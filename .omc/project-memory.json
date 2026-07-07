@@ -1,0 +1,200 @@
+{
+  "version": "1.0.0",
+  "lastScanned": 1783430068491,
+  "projectRoot": "/mnt/c/Users/tyler/projects/m3p",
+  "techStack": {
+    "languages": [],
+    "frameworks": [],
+    "packageManager": null,
+    "runtime": null
+  },
+  "build": {
+    "buildCommand": "npm run build 2>&1",
+    "testCommand": null,
+    "lintCommand": null,
+    "devCommand": null,
+    "scripts": {}
+  },
+  "conventions": {
+    "namingStyle": null,
+    "importStyle": null,
+    "testPattern": null,
+    "fileOrganization": null
+  },
+  "structure": {
+    "isMonorepo": false,
+    "workspaces": [],
+    "mainDirectories": [],
+    "gitBranches": {
+      "defaultBranch": "main",
+      "branchingStrategy": null
+    }
+  },
+  "customNotes": [],
+  "directoryMap": {},
+  "hotPaths": [
+    {
+      "path": "src/App.tsx",
+      "accessCount": 19,
+      "lastAccessed": 1783435439554,
+      "type": "file"
+    },
+    {
+      "path": "server/db.ts",
+      "accessCount": 12,
+      "lastAccessed": 1783434774500,
+      "type": "file"
+    },
+    {
+      "path": "src/App.css",
+      "accessCount": 12,
+      "lastAccessed": 1783435419032,
+      "type": "file"
+    },
+    {
+      "path": "src/components/Overlay.tsx",
+      "accessCount": 8,
+      "lastAccessed": 1783434764343,
+      "type": "file"
+    },
+    {
+      "path": "src/engine/game.ts",
+      "accessCount": 8,
+      "lastAccessed": 1783435315411,
+      "type": "file"
+    },
+    {
+      "path": "server/index.ts",
+      "accessCount": 7,
+      "lastAccessed": 1783434773791,
+      "type": "file"
+    },
+    {
+      "path": "src/components/Board.tsx",
+      "accessCount": 6,
+      "lastAccessed": 1783435338677,
+      "type": "file"
+    },
+    {
+      "path": "src/components/Header.tsx",
+      "accessCount": 6,
+      "lastAccessed": 1783435393438,
+      "type": "file"
+    },
+    {
+      "path": "tsconfig.node.json",
+      "accessCount": 5,
+      "lastAccessed": 1783434616390,
+      "type": "file"
+    },
+    {
+      "path": "src/components/ProfileModal.tsx",
+      "accessCount": 5,
+      "lastAccessed": 1783434765125,
+      "type": "file"
+    },
+    {
+      "path": "server/routes.ts",
+      "accessCount": 5,
+      "lastAccessed": 1783434774132,
+      "type": "file"
+    },
+    {
+      "path": "src/components/Gem.tsx",
+      "accessCount": 5,
+      "lastAccessed": 1783435334125,
+      "type": "file"
+    },
+    {
+      "path": "index.html",
+      "accessCount": 4,
+      "lastAccessed": 1783434708490,
+      "type": "file"
+    },
+    {
+      "path": "src/engine/levels.ts",
+      "accessCount": 4,
+      "lastAccessed": 1783434759986,
+      "type": "file"
+    },
+    {
+      "path": "src/components/ComboPopup.tsx",
+      "accessCount": 4,
+      "lastAccessed": 1783434764755,
+      "type": "file"
+    },
+    {
+      "path": "src/main.tsx",
+      "accessCount": 4,
+      "lastAccessed": 1783434774838,
+      "type": "file"
+    },
+    {
+      "path": "package.json",
+      "accessCount": 4,
+      "lastAccessed": 1783434889793,
+      "type": "file"
+    },
+    {
+      "path": "tsconfig.json",
+      "accessCount": 2,
+      "lastAccessed": 1783434616035,
+      "type": "file"
+    },
+    {
+      "path": "vite.config.ts",
+      "accessCount": 2,
+      "lastAccessed": 1783434616724,
+      "type": "file"
+    },
+    {
+      "path": "src/vite-env.d.ts",
+      "accessCount": 2,
+      "lastAccessed": 1783434618183,
+      "type": "file"
+    },
+    {
+      "path": ".env.example",
+      "accessCount": 2,
+      "lastAccessed": 1783434632763,
+      "type": "file"
+    },
+    {
+      "path": "manifest.json",
+      "accessCount": 1,
+      "lastAccessed": 1783430298273,
+      "type": "file"
+    },
+    {
+      "path": "sw.js",
+      "accessCount": 1,
+      "lastAccessed": 1783430301900,
+      "type": "file"
+    },
+    {
+      "path": ".env",
+      "accessCount": 1,
+      "lastAccessed": 1783430710050,
+      "type": "file"
+    },
+    {
+      "path": "vite.config.d.ts",
+      "accessCount": 1,
+      "lastAccessed": 1783434622477,
+      "type": "file"
+    },
+    {
+      "path": "README.md",
+      "accessCount": 1,
+      "lastAccessed": 1783434633463,
+      "type": "file"
+    },
+    {
+      "path": "src/components/LoginScreen.tsx",
+      "accessCount": 1,
+      "lastAccessed": 1783435331760,
+      "type": "file"
+    }
+  ],
+  "userDirectives": []
+}

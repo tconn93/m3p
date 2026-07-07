@@ -1,0 +1,79 @@
+{
+  "updatedAt": "2026-07-07T14:36:41.892Z",
+  "missions": [
+    {
+      "id": "session:499129bd-c8bf-47f4-849f-76765a51c36c:none",
+      "source": "session",
+      "name": "none",
+      "objective": "Session mission",
+      "createdAt": "2026-07-07T14:30:02.770Z",
+      "updatedAt": "2026-07-07T14:36:41.892Z",
+      "status": "done",
+      "workerCount": 2,
+      "taskCounts": {
+        "total": 2,
+        "pending": 0,
+        "blocked": 0,
+        "inProgress": 0,
+        "completed": 2,
+        "failed": 0
+      },
+      "agents": [
+        {
+          "name": "Explore:af433ad",
+          "role": "Explore",
+          "ownership": "af433ad9be19411f7",
+          "status": "done",
+          "currentStep": null,
+          "latestUpdate": "completed",
+          "completedSummary": null,
+          "updatedAt": "2026-07-07T14:31:27.673Z"
+        },
+        {
+          "name": "Plan:abb07bd",
+          "role": "Plan",
+          "ownership": "abb07bd0c1ee163ee",
+          "status": "done",
+          "currentStep": null,
+          "latestUpdate": "completed",
+          "completedSummary": null,
+          "updatedAt": "2026-07-07T14:36:41.892Z"
+        }
+      ],
+      "timeline": [
+        {
+          "id": "session-start:af433ad9be19411f7:2026-07-07T14:30:02.770Z",
+          "at": "2026-07-07T14:30:02.770Z",
+          "kind": "update",
+          "agent": "Explore:af433ad",
+          "detail": "started Explore:af433ad",
+          "sourceKey": "session-start:af433ad9be19411f7"
+        },
+        {
+          "id": "session-stop:af433ad9be19411f7:2026-07-07T14:31:27.673Z",
+          "at": "2026-07-07T14:31:27.673Z",
+          "kind": "completion",
+          "agent": "Explore:af433ad",
+          "detail": "completed",
+          "sourceKey": "session-stop:af433ad9be19411f7"
+        },
+        {
+          "id": "session-start:abb07bd0c1ee163ee:2026-07-07T14:32:31.538Z",
+          "at": "2026-07-07T14:32:31.538Z",
+          "kind": "update",
+          "agent": "Plan:abb07bd",
+          "detail": "started Plan:abb07bd",
+          "sourceKey": "session-start:abb07bd0c1ee163ee"
+        },
+        {
+          "id": "session-stop:abb07bd0c1ee163ee:2026-07-07T14:36:41.892Z",
+          "at": "2026-07-07T14:36:41.892Z",
+          "kind": "completion",
+          "agent": "Plan:abb07bd",
+          "detail": "completed",
+          "sourceKey": "session-stop:abb07bd0c1ee163ee"
+        }
+      ]
+    }
+  ]
+}

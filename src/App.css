@@ -1,0 +1,978 @@
+/* ═══════════════════════════════════════════════════
+   Gem Crush — Mobile-First Match-3 PWA
+   ═══════════════════════════════════════════════════ */
+
+:root {
+  --bg: #1a0520;
+  --bg-card: #2d1040;
+  --text: #f0e6f6;
+  --text-muted: #a090b0;
+  --accent: #e04090;
+  --accent-glow: #ff60b0;
+  --gold: #ffc107;
+  --gem-0: #ff3b5c;
+  --gem-0-glow: #ff6b81;
+  --gem-1: #ffc107;
+  --gem-1-glow: #ffda55;
+  --gem-2: #ff6b2b;
+  --gem-2-glow: #ff8c5a;
+  --gem-3: #2ed573;
+  --gem-3-glow: #5fe89a;
+  --gem-4: #1e90ff;
+  --gem-4-glow: #5badff;
+  --gem-5: #c471f5;
+  --gem-5-glow: #daa0ff;
+  --cell-size: min(11vw, 48px);
+  --board-gap: 3px;
+}
+
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  overflow: hidden;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+body {
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+
+#root {
+  height: 100%;
+  height: 100dvh;
+}
+
+/* ── App Layout ─────────────────────────────── */
+
+.app {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  height: 100dvh;
+  max-width: 520px;
+  margin: 0 auto;
+  position: relative;
+  overflow: hidden;
+}
+
+/* ── Header ─────────────────────────────────── */
+
+.game-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 12px 12px 8px;
+  padding-top: max(12px, env(safe-area-inset-top));
+  gap: 6px;
+}
+
+.header-left,
+.header-right {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: center;
+  min-width: 72px;
+}
+
+.header-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  flex: 1;
+}
+
+.game-title {
+  font-size: 1.05rem;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  background: linear-gradient(135deg, var(--accent-glow), var(--gem-5-glow));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  white-space: nowrap;
+}
+
+/* Level badge */
+.level-badge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  border: 2px solid var(--text-muted);
+  border-radius: 14px;
+  padding: 4px 12px;
+  min-width: 56px;
+}
+
+.level-num {
+  font-size: 1.5rem;
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+
+.level-tier {
+  font-size: 0.55rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+/* Target display */
+.target-display {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+}
+
+.target-label {
+  font-size: 0.55rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+}
+
+.target-value {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--gold);
+}
+
+/* Score & Moves */
+.header-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+}
+
+.header-stat .label {
+  font-size: 0.55rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+}
+
+.header-stat .value {
+  font-size: 1.2rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.btn-profile {
+  background: none;
+  border: 1px solid rgba(255,255,255,0.12);
+  color: var(--text-muted);
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-size: 0.65rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-top: 2px;
+}
+
+.btn-profile:active {
+  background: var(--bg-card);
+  color: var(--text);
+}
+
+/* ── Game Area ──────────────────────────────── */
+
+.game-area {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  overflow: hidden;
+}
+
+/* ── Board ──────────────────────────────────── */
+
+.board-container {
+  position: relative;
+  padding: 12px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.03);
+  box-shadow:
+    0 0 60px rgba(160, 80, 255, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.board {
+  display: grid;
+  grid-template-columns: repeat(8, var(--cell-size));
+  grid-template-rows: repeat(8, var(--cell-size));
+  gap: var(--board-gap);
+  position: relative;
+}
+
+/* ── Cell ───────────────────────────────────── */
+
+.cell {
+  width: var(--cell-size);
+  height: var(--cell-size);
+  border-radius: 8px;
+  cursor: pointer;
+  position: relative;
+  transition: transform 0.15s ease;
+}
+
+.cell:active {
+  transform: scale(0.9);
+}
+
+/* ── Gem ────────────────────────────────────── */
+
+.gem {
+  width: 100%;
+  height: 100%;
+  border-radius: 8px;
+  position: relative;
+  transition:
+    transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
+    opacity 0.25s ease;
+  overflow: hidden;
+}
+
+.gem::before {
+  content: '';
+  position: absolute;
+  inset: 15%;
+  border-radius: 50%;
+  background: radial-gradient(circle at 40% 35%, rgba(255, 255, 255, 0.5), transparent 60%);
+  pointer-events: none;
+}
+
+.gem::after {
+  content: '';
+  position: absolute;
+  inset: 3px;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  pointer-events: none;
+}
+
+/* Gem shapes */
+.gem-type-0 { background: radial-gradient(circle at 40% 35%, var(--gem-0-glow), var(--gem-0) 70%); }
+.gem-type-1 { background: radial-gradient(circle at 40% 35%, var(--gem-1-glow), var(--gem-1) 70%); }
+.gem-type-2 { background: radial-gradient(circle at 40% 35%, var(--gem-2-glow), var(--gem-2) 70%); }
+.gem-type-3 { background: radial-gradient(circle at 40% 35%, var(--gem-3-glow), var(--gem-3) 70%); }
+.gem-type-4 { background: radial-gradient(circle at 40% 35%, var(--gem-4-glow), var(--gem-4) 70%); }
+.gem-type-5 { background: radial-gradient(circle at 40% 35%, var(--gem-5-glow), var(--gem-5) 70%); }
+
+.gem-type-0 .gem-shape { background: radial-gradient(circle, #fff 5%, transparent 50%); opacity: 0.3; }
+.gem-type-1 .gem-shape { background: conic-gradient(from 0deg, #fff 0deg, transparent 90deg); opacity: 0.12; }
+.gem-type-2 .gem-shape { background: radial-gradient(circle, #fff 10%, transparent 40%); opacity: 0.25; }
+.gem-type-3 .gem-shape { background: linear-gradient(135deg, transparent 40%, #fff 41%, transparent 42%); opacity: 0.15; }
+.gem-type-4 .gem-shape { background: radial-gradient(circle at 50% 50%, #fff 3%, transparent 50%); opacity: 0.2; }
+.gem-type-5 .gem-shape { background: radial-gradient(ellipse at 50% 50%, #fff 8%, transparent 50%); opacity: 0.2; }
+
+.gem-shape {
+  position: absolute;
+  inset: 20%;
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+/* States */
+.gem.selected {
+  transform: scale(1.1);
+  filter: brightness(1.3);
+  z-index: 2;
+  animation: pulse-selected 0.8s ease-in-out infinite;
+}
+
+.gem.hint {
+  animation: pulse-hint 0.6s ease-in-out infinite;
+}
+
+.gem.clearing {
+  animation: pop-out 0.3s ease forwards;
+}
+
+.gem.falling {
+  animation: fall-in 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.gem.empty {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Swap animation for two gems */
+.gem.swap-a {
+  animation: swap-a 0.3s ease;
+}
+
+.gem.swap-b {
+  animation: swap-b 0.3s ease;
+}
+
+@keyframes pulse-selected {
+  0%, 100% { box-shadow: 0 0 12px rgba(255, 255, 255, 0.4); }
+  50% { box-shadow: 0 0 24px rgba(255, 255, 255, 0.7); }
+}
+
+@keyframes pulse-hint {
+  0%, 100% { filter: brightness(1); }
+  50% { filter: brightness(1.5) drop-shadow(0 0 8px rgba(255,255,255,0.6)); }
+}
+
+@keyframes pop-out {
+  0% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.3); opacity: 0.6; }
+  100% { transform: scale(0); opacity: 0; }
+}
+
+@keyframes fall-in {
+  0% { transform: translateY(-60px); opacity: 0.5; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes swap-a {
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(var(--swap-dx), var(--swap-dy)); }
+}
+
+@keyframes swap-b {
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(var(--swap-back-dx), var(--swap-back-dy)); }
+}
+
+/* ── Footer ─────────────────────────────────── */
+
+.game-footer {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  padding: 12px 16px;
+  padding-bottom: max(12px, env(safe-area-inset-bottom));
+}
+
+.game-btn {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: none;
+  background: var(--bg-card);
+  color: var(--text);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.game-btn:active {
+  transform: scale(0.92);
+  background: #3d1858;
+}
+
+.game-btn.primary {
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, var(--accent), #c03070);
+  box-shadow: 0 4px 20px rgba(224, 64, 144, 0.35);
+}
+
+.game-btn.primary:active {
+  box-shadow: 0 2px 10px rgba(224, 64, 144, 0.25);
+}
+
+.game-btn:disabled {
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+.game-btn.large {
+  width: auto;
+  height: auto;
+  border-radius: 16px;
+  padding: 14px 32px;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+/* ── Overlay ────────────────────────────────── */
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 2, 16, 0.92);
+  backdrop-filter: blur(12px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  animation: fade-in 0.3s ease;
+}
+
+.overlay-content {
+  text-align: center;
+  padding: 40px 32px;
+  max-width: 340px;
+  animation: slide-up 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.overlay-content h2 {
+  font-size: 1.8rem;
+  font-weight: 900;
+  margin-bottom: 4px;
+}
+
+.overlay-level {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-bottom: 12px;
+}
+
+.stars-display {
+  margin-bottom: 16px;
+}
+
+.star {
+  font-size: 2.2rem;
+  margin: 0 4px;
+}
+
+.star.filled {
+  color: var(--gold);
+  text-shadow: 0 0 12px rgba(255, 193, 7, 0.5);
+}
+
+.star.empty {
+  color: rgba(255, 255, 255, 0.15);
+}
+
+.overlay-detail {
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 14px;
+  padding: 14px 20px;
+  margin-bottom: 20px;
+}
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 0;
+  font-size: 0.9rem;
+}
+
+.detail-row span {
+  color: var(--text-muted);
+}
+
+.detail-row strong {
+  font-weight: 800;
+}
+
+.overlay-buttons {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.overlay-type-win h2 {
+  background: linear-gradient(135deg, var(--gold), #ff8c00);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.overlay-type-lose h2 {
+  color: var(--text-muted);
+}
+
+/* ── Combo Popup ────────────────────────────── */
+
+.combo-popup {
+  position: fixed;
+  top: 35%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 50;
+  font-size: 1.4rem;
+  font-weight: 900;
+  text-align: center;
+  animation: combo-in 1.2s ease forwards;
+}
+
+.combo-popup .combo-label {
+  background: linear-gradient(135deg, var(--gold), #ff6b00);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: none;
+  font-size: 2rem;
+}
+
+@keyframes combo-in {
+  0% { opacity: 0; transform: translate(-50%, -50%) scale(0.5) translateY(20px); }
+  30% { opacity: 1; transform: translate(-50%, -50%) scale(1.15) translateY(0); }
+  60% { opacity: 1; transform: translate(-50%, -50%) scale(1) translateY(0); }
+  100% { opacity: 0; transform: translate(-50%, -50%) scale(0.9) translateY(-40px); }
+}
+
+/* ── Profile Modal ──────────────────────────── */
+
+.profile-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 2, 16, 0.95);
+  backdrop-filter: blur(12px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+  padding: 24px;
+  animation: fade-in 0.25s ease;
+}
+
+.profile-card {
+  background: var(--bg-card);
+  border-radius: 24px;
+  padding: 32px 24px;
+  width: 100%;
+  max-width: 380px;
+  animation: slide-up 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.profile-card h2 {
+  font-size: 1.3rem;
+  font-weight: 800;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.profile-card input {
+  width: 100%;
+  padding: 14px 16px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text);
+  font-size: 1rem;
+  margin-bottom: 12px;
+  outline: none;
+  transition: border 0.2s;
+}
+
+.profile-card input:focus {
+  border-color: var(--accent);
+}
+
+.profile-card .btn-row {
+  display: flex;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.profile-card .btn-row .game-btn {
+  flex: 1;
+  border-radius: 12px;
+  height: 48px;
+  font-weight: 700;
+}
+
+/* ── Profile Stats ──────────────────────────── */
+
+.profile-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 16px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 14px;
+  padding: 14px 18px;
+}
+
+.profile-stat {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.ps-label {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.ps-value {
+  font-weight: 800;
+  font-size: 0.95rem;
+}
+
+.ps-value.highlight {
+  color: var(--accent-glow);
+}
+
+/* ── Leaderboard ────────────────────────────── */
+
+.leaderboard {
+  margin-top: 24px;
+  max-height: 320px;
+  overflow-y: auto;
+}
+
+.leaderboard h3 {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+  margin-bottom: 10px;
+}
+
+.leaderboard-header {
+  display: flex;
+  justify-content: space-between;
+  padding: 4px 0 8px;
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.leaderboard-header .rank { width: 24px; }
+.leaderboard-header .username { flex: 1; }
+.leaderboard-header .lb-score { width: 72px; text-align: right; }
+.leaderboard-header .lb-level { width: 32px; text-align: right; }
+
+.leaderboard-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  font-size: 0.82rem;
+  transition: background 0.15s;
+}
+
+.leaderboard-item.is-me {
+  background: rgba(224, 64, 144, 0.08);
+  margin: 0 -8px;
+  padding-left: 8px;
+  padding-right: 8px;
+  border-radius: 6px;
+}
+
+.leaderboard-item .rank {
+  width: 24px;
+  font-weight: 800;
+  color: var(--text-muted);
+}
+
+.leaderboard-item .username {
+  flex: 1;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.leaderboard-item .lb-score {
+  width: 72px;
+  text-align: right;
+  font-weight: 800;
+  color: var(--accent-glow);
+}
+
+.leaderboard-item .lb-level {
+  width: 32px;
+  text-align: right;
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+/* ── Shared animations ──────────────────────── */
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* ── Guest badge ─────────────────────────────── */
+
+.guest-badge {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-muted);
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-size: 0.65rem;
+  font-weight: 600;
+  margin-top: 2px;
+}
+
+/* ── Gem type 6 (7th gem, hard 3000+) ────────── */
+
+.gem-type-6 { background: radial-gradient(circle at 40% 35%, #ff8c94, #e84160 70%); }
+.gem-type-6 .gem-shape { background: conic-gradient(from 90deg, #fff 0deg, transparent 60deg); opacity: 0.15; }
+
+/* ── Special block styles ────────────────────── */
+
+/* Striped horizontal — white horizontal bands */
+.gem.special-striped-h::after {
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent,
+    transparent 28%,
+    rgba(255, 255, 255, 0.35) 28%,
+    rgba(255, 255, 255, 0.35) 38%
+  );
+  border: 2px solid rgba(255, 255, 255, 0.4);
+}
+
+/* Striped vertical — white vertical bands */
+.gem.special-striped-v::after {
+  background: repeating-linear-gradient(
+    to right,
+    transparent,
+    transparent 28%,
+    rgba(255, 255, 255, 0.35) 28%,
+    rgba(255, 255, 255, 0.35) 38%
+  );
+  border: 2px solid rgba(255, 255, 255, 0.4);
+}
+
+/* Bomb — dark center with pulsing glow */
+.gem.special-bomb {
+  animation: pulse-bomb 0.7s ease-in-out infinite;
+}
+.gem.special-bomb::before {
+  background: radial-gradient(circle at 50% 50%, rgba(0, 0, 0, 0.55) 25%, transparent 55%);
+}
+.gem.special-bomb .gem-shape {
+  background: radial-gradient(circle at 50% 50%, #fff 8%, transparent 30%);
+  opacity: 0.5;
+}
+
+/* Color bomb — rainbow swirl */
+.gem.special-color-bomb {
+  background: conic-gradient(
+    var(--gem-0), var(--gem-1), var(--gem-2),
+    var(--gem-3), var(--gem-4), var(--gem-5), var(--gem-0)
+  ) !important;
+  animation: spin-rainbow 2.5s linear infinite;
+}
+.gem.special-color-bomb::before {
+  background: radial-gradient(circle at 40% 35%, rgba(255, 255, 255, 0.6), transparent 50%);
+}
+.gem.special-color-bomb .gem-shape {
+  background: radial-gradient(circle, #fff 15%, transparent 40%);
+  opacity: 0.4;
+}
+
+/* Rocket — triangle indicator */
+.gem.special-rocket::before {
+  background:
+    radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.4) 10%, transparent 40%);
+}
+.gem.special-rocket .gem-shape {
+  width: 0;
+  height: 0;
+  top: 18%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-left: 7px solid transparent;
+  border-right: 7px solid transparent;
+  border-bottom: 12px solid rgba(255, 255, 255, 0.8);
+  background: none;
+  border-radius: 0;
+  opacity: 1;
+}
+
+@keyframes pulse-bomb {
+  0%, 100% { box-shadow: 0 0 6px rgba(255, 200, 0, 0.5), inset 0 0 6px rgba(255, 200, 0, 0.3); }
+  50% { box-shadow: 0 0 18px rgba(255, 200, 0, 0.9), inset 0 0 12px rgba(255, 200, 0, 0.5); }
+}
+
+@keyframes spin-rainbow {
+  from { filter: hue-rotate(0deg); }
+  to { filter: hue-rotate(360deg); }
+}
+
+/* ── Login Screen ────────────────────────────── */
+
+.login-screen {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  height: 100dvh;
+  padding: 24px;
+  background: var(--bg);
+  animation: fade-in 0.3s ease;
+}
+
+.login-card {
+  background: var(--bg-card);
+  border-radius: 28px;
+  padding: 40px 28px 32px;
+  width: 100%;
+  max-width: 380px;
+  text-align: center;
+  animation: slide-up 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+}
+
+.login-logo {
+  margin-bottom: 28px;
+}
+
+.login-icon {
+  font-size: 3rem;
+  margin-bottom: 8px;
+}
+
+.login-title {
+  font-size: 1.8rem;
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  background: linear-gradient(135deg, var(--accent-glow), var(--gem-5-glow));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.login-subtitle {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-top: 6px;
+}
+
+.login-form {
+  margin-bottom: 16px;
+}
+
+.login-input {
+  width: 100%;
+  padding: 14px 16px;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text);
+  font-size: 1rem;
+  text-align: center;
+  outline: none;
+  transition: border 0.2s;
+  margin-bottom: 8px;
+}
+
+.login-input:focus {
+  border-color: var(--accent);
+}
+
+.login-input::placeholder {
+  color: var(--text-muted);
+  opacity: 0.6;
+}
+
+.login-error {
+  color: #ff4757;
+  font-size: 0.78rem;
+  margin-bottom: 8px;
+}
+
+.login-btn {
+  width: 100%;
+  padding: 14px;
+  border-radius: 14px;
+  border: none;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.login-btn:active {
+  transform: scale(0.97);
+}
+
+.login-btn.primary {
+  background: linear-gradient(135deg, var(--accent), #c03070);
+  color: #fff;
+  box-shadow: 0 4px 20px rgba(224, 64, 144, 0.35);
+}
+
+.login-btn.primary:disabled {
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+.login-btn.guest {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text-muted);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.login-btn.guest:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text);
+}
+
+.login-divider {
+  display: flex;
+  align-items: center;
+  margin: 16px 0;
+}
+
+.login-divider::before,
+.login-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.login-divider-text {
+  padding: 0 14px;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.login-guest-note {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  margin-top: 6px;
+  opacity: 0.7;
+}
+
+/* ── Landscape warning ──────────────────────── */
+
+@media (max-width: 380px) {
+  :root {
+    --cell-size: 10.5vw;
+  }
+}

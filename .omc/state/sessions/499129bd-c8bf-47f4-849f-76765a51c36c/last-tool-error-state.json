@@ -1,0 +1,7 @@
+{
+  "tool_name": "Bash",
+  "tool_input_preview": "{\"command\":\"npx tsc --noEmit 2>&1\",\"timeout\":60000,\"description\":\"Run TypeScript compiler check\"}",
+  "error": "Exit code 2\nsrc/App.tsx(1,23): error TS6133: 'useEffect' is declared but its value is never read.\nsrc/App.tsx(63,9): error TS6133: 'username' is declared but its value is never read.\nsrc/App.tsx(67,36): error TS6133: 'name' is declared but its value is never read.",
+  "timestamp": "2026-07-07T14:43:48.031Z",
+  "retry_count": 1
+}
