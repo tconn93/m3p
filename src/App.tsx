@@ -81,6 +81,12 @@ export default function App() {
     }
   }, [isGuest]);
 
+  const handleLogout = useCallback(() => {
+    setIsGuest(false);
+    setGame(createInitialState(levelConfig));
+    setScreen('login');
+  }, [levelConfig]);
+
   /* ── Level management ───────────────────────── */
 
   const startLevel = useCallback((lvl: number) => {
@@ -511,7 +517,7 @@ export default function App() {
       )}
 
       {screen === 'profile' && (
-        <ProfileModal onClose={() => setScreen('game')} />
+        <ProfileModal onClose={() => setScreen('game')} onLogout={handleLogout} />
       )}
     </div>
   );

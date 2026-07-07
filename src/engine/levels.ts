@@ -46,7 +46,7 @@ export function getLevelConfig(level: number): LevelConfig {
       gemTypes: 5,
       rows: 8,
       cols: 8,
-      moves: Math.round(35 - t * 10),       // 35 → 25
+      moves: Math.round(35 - t * 10),          // 35 → 25
       targetScore: Math.round(500 + t * 4500), // 500 → 5,000
     };
   }
@@ -60,7 +60,7 @@ export function getLevelConfig(level: number): LevelConfig {
       gemTypes: 6,
       rows: 8,
       cols: 8,
-      moves: Math.round(28 - t * 8),          // 28 → 20
+      moves: Math.round(25 - t * 5),           // 25 → 20 (continuous from easy end)
       targetScore: Math.round(5000 + t * 10000), // 5,000 → 15,000
     };
   }
@@ -73,7 +73,7 @@ export function getLevelConfig(level: number): LevelConfig {
     gemTypes: level >= 3000 ? 7 : 6,          // 7 gem types at 3000+
     rows: 8,
     cols: 8,
-    moves: Math.round(22 - t * 7),             // 22 → 15
+    moves: Math.round(20 - t * 5),             // 20 → 15 (continuous from medium end)
     targetScore: Math.round(15000 + t * 35000), // 15,000 → 50,000
   };
 }

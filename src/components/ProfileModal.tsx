@@ -9,12 +9,17 @@ interface LeaderboardEntry {
 
 interface ProfileModalProps {
   onClose: () => void;
+  onLogout: () => void;
 }
+
+type AuthMode = 'login' | 'register';
 
 const API = '/api';
 
-export default function ProfileModal({ onClose }: ProfileModalProps) {
+export default function ProfileModal({ onClose, onLogout }: ProfileModalProps) {
   const [username, setUsername] = useState(() => localStorage.getItem('gemcrush-username') || '');
+  const [password, setPassword] = useState('');
+  const [authMode, setAuthMode] = useState<AuthMode>('login');
   const [loggedIn, setLoggedIn] = useState(false);
   const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([]);
   const [lifetimeScore, setLifetimeScore] = useState(0);
@@ -54,14 +59,19 @@ export default function ProfileModal({ onClose }: ProfileModalProps) {
     }
   }, [username, fetchProfile, fetchLeaderboard]);
 
-  const handleLogin = async () => {
-    if (!username.trim()) return;
+  const handleAuth = async () => {
+    const name = username.trim();
+    if (!name || !password) return;
+
     setLoading(true);
+
+    const endpoint = authMode === 'login' ? `${API}/auth/login` : `${API}/auth/register`;
+
     try {
-      const res = await fetch(`${API}/profiles`, {
+      const res = await fetch(endpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username: username.trim() }),
+        body: JSON.stringify({ username: name, password }),
       });
       if (res.ok) {
         const data = await res.json();
@@ -70,12 +80,13 @@ export default function ProfileModal({ onClose }: ProfileModalProps) {
         setLifetimeScore(data.lifetime_score || 0);
         setCurrentLevel(data.current_level || 1);
         setLoggedIn(true);
+        setPassword('');
         fetchLeaderboard();
+      } else {
+        // ProfileModal doesn't have inline error display — auth failure is silent
       }
     } catch {
-      // Server offline — still allow local play
-      localStorage.setItem('gemcrush-username', username.trim());
-      setLoggedIn(true);
+      // Server offline
     }
     setLoading(false);
   };
@@ -86,6 +97,7 @@ export default function ProfileModal({ onClose }: ProfileModalProps) {
     setLoggedIn(false);
     setLifetimeScore(0);
     setCurrentLevel(1);
+    onLogout();
   };
 
   return (
@@ -95,21 +107,43 @@ export default function ProfileModal({ onClose }: ProfileModalProps) {
 
         {!loggedIn ? (
           <>
+            <div className="auth-tabs">
+              <button
+                className={`auth-tab ${authMode === 'login' ? 'active' : ''}`}
+                onClick={() => setAuthMode('login')}
+                disabled={loading}
+              >
+                Login
+              </button>
+              <button
+                className={`auth-tab ${authMode === 'register' ? 'active' : ''}`}
+                onClick={() => setAuthMode('register')}
+                disabled={loading}
+              >
+                Register
+              </button>
+            </div>
             <input
               type="text"
-              placeholder="Enter username"
+              placeholder="Username"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               maxLength={24}
               autoFocus
             />
+            <input
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
             <div className="btn-row">
               <button
                 className="game-btn primary"
-                onClick={handleLogin}
-                disabled={loading || !username.trim()}
+                onClick={handleAuth}
+                disabled={loading || !username.trim() || !password}
               >
-                {loading ? '...' : 'Play'}
+                {loading ? '...' : authMode === 'login' ? 'Login' : 'Create Account'}
               </button>
               <button className="game-btn" onClick={onClose}>
                 Cancel

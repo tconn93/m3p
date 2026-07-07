@@ -1,33 +1,90 @@
 import { Router, type Request, type Response } from 'express';
 import pool from './db.js';
+import { hashPassword, verifyPassword } from './auth.js';
 
 const router = Router();
 
-// ── Profile ──────────────────────────────────────────
+// ── Auth ─────────────────────────────────────────────
 
-router.post('/api/profiles', async (req: Request, res: Response) => {
+router.post('/api/auth/register', async (req: Request, res: Response) => {
   try {
-    const { username } = req.body;
+    const { username, password } = req.body;
+
     if (!username || typeof username !== 'string' || username.trim().length === 0) {
       res.status(400).json({ error: 'Username is required' });
       return;
     }
+    if (!password || typeof password !== 'string' || password.length < 4) {
+      res.status(400).json({ error: 'Password must be at least 4 characters' });
+      return;
+    }
+
+    const passwordHash = await hashPassword(password);
 
     const result = await pool.query(
-      'INSERT INTO profiles (username) VALUES ($1) ON CONFLICT (username) DO UPDATE SET updated_at = now() RETURNING *',
-      [username.trim()]
+      'INSERT INTO profiles (username, password_hash) VALUES ($1, $2) RETURNING id, username, lifetime_score, current_level, created_at',
+      [username.trim(), passwordHash]
     );
-    res.json(result.rows[0]);
-  } catch (err) {
-    console.error('Error creating profile:', err);
+    res.status(201).json(result.rows[0]);
+  } catch (err: any) {
+    if (err.code === '23505') {
+      res.status(409).json({ error: 'Username already taken' });
+      return;
+    }
+    console.error('Error registering user:', err);
     res.status(500).json({ error: 'Internal server error' });
   }
 });
 
+router.post('/api/auth/login', async (req: Request, res: Response) => {
+  try {
+    const { username, password } = req.body;
+
+    if (!username || !password) {
+      res.status(400).json({ error: 'Username and password are required' });
+      return;
+    }
+
+    const result = await pool.query(
+      'SELECT id, username, password_hash, lifetime_score, current_level, created_at FROM profiles WHERE username = $1',
+      [username.trim()]
+    );
+
+    if (result.rows.length === 0) {
+      res.status(401).json({ error: 'Invalid username or password' });
+      return;
+    }
+
+    const profile = result.rows[0];
+
+    if (!profile.password_hash) {
+      res.status(401).json({ error: 'This account has no password. Please register again.' });
+      return;
+    }
+
+    const valid = await verifyPassword(password, profile.password_hash);
+    if (!valid) {
+      res.status(401).json({ error: 'Invalid username or password' });
+      return;
+    }
+
+    const { password_hash: _, ...safeProfile } = profile;
+    res.json(safeProfile);
+  } catch (err) {
+    console.error('Error logging in:', err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// ── Profile ──────────────────────────────────────────
+
 router.get('/api/profiles/:username', async (req: Request, res: Response) => {
   try {
     const { username } = req.params;
-    const result = await pool.query('SELECT * FROM profiles WHERE username = $1', [username]);
+    const result = await pool.query(
+      'SELECT id, username, lifetime_score, current_level, created_at, updated_at FROM profiles WHERE username = $1',
+      [username]
+    );
     if (result.rows.length === 0) {
       res.status(404).json({ error: 'Profile not found' });
       return;

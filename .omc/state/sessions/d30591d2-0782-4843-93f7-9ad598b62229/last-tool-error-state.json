@@ -1,0 +1,7 @@
+{
+  "tool_name": "mcp__plugin_oh-my-claudecode_t__lsp_workspace_symbols",
+  "tool_input_preview": "{\"query\":\"getCombinedSpecialEffect\",\"file\":\"/mnt/c/Users/tyler/projects/m3p/src/engine/game.ts\"}",
+  "error": "Language server 'typescript-language-server' not found.\nInstall with: npm install -g typescript-language-server typescript",
+  "timestamp": "2026-07-07T16:23:34.808Z",
+  "retry_count": 2
+}

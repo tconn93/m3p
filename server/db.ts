@@ -56,6 +56,7 @@ export async function initDb(): Promise<void> {
     await client.query(`
       ALTER TABLE profiles ADD COLUMN IF NOT EXISTS lifetime_score INTEGER NOT NULL DEFAULT 0;
       ALTER TABLE profiles ADD COLUMN IF NOT EXISTS current_level INTEGER NOT NULL DEFAULT 1;
+      ALTER TABLE profiles ADD COLUMN IF NOT EXISTS password_hash TEXT;
       ALTER TABLE high_scores ADD COLUMN IF NOT EXISTS stars INTEGER NOT NULL DEFAULT 0;
     `);
 

@@ -132,9 +132,11 @@ export function createBoard(rows: number, cols: number, numTypes: number): Cell[
     board.push([]);
     for (let c = 0; c < cols; c++) {
       let gem: GemType;
+      let attempts = 0;
       do {
-        gem = randomGem(numTypes);
-      } while (wouldMatch(board, r, c, gem));
+        gem = randomGem(Math.max(numTypes, 3));
+        attempts++;
+      } while (attempts < 100 && wouldMatch(board, r, c, gem));
       board[r].push(makeCell(gem));
     }
   }
@@ -283,9 +285,15 @@ export function analyzeMatchShapes(
   const specialCreations: SpecialCreation[] = [];
   const creationPositions: Position[] = []; // track where specials are placed
 
-  // Separate into horizontal and vertical matches
-  const horiz = matches.filter((m) => m.positions.length >= 2 && m.positions[0].row === m.positions[1].row);
-  const vert = matches.filter((m) => m.positions.length >= 2 && m.positions[0].col === m.positions[1].col);
+  // Separate into true line matches (all positions share same row or col).
+  // Must check every position — a 2x2 square has positions[0].row===positions[1].row
+  // but is not a true horizontal line.
+  const horiz = matches.filter((m) =>
+    m.positions.length >= 2 && m.positions.every((p) => p.row === m.positions[0].row),
+  );
+  const vert = matches.filter((m) =>
+    m.positions.length >= 2 && m.positions.every((p) => p.col === m.positions[0].col),
+  );
 
   // Find L/T intersections: a horiz and vert match that share a cell
   const usedForIntersection = new Set<string>(); // match index keys: "h<idx>" or "v<idx>"
@@ -774,17 +782,25 @@ export function findHint(board: Cell[][]): { a: Position; b: Position } | null {
 
       // Try swap right
       if (c < cols - 1) {
+        // Special + special swap is always valid
+        if (hasSpecial(cell) && hasSpecial(board[r][c + 1])) {
+          return { a: { row: r, col: c }, b: { row: r, col: c + 1 } };
+        }
         const swapped = swap(board, { row: r, col: c }, { row: r, col: c + 1 });
         if (findMatches(swapped).length > 0) {
           return { a: { row: r, col: c }, b: { row: r, col: c + 1 } };
         }
-        // Also check if swap involves a color bomb
+        // Also check if swap involves a color bomb (handled above but also here for safety)
         if (isColorBomb(board[r][c + 1])) {
           return { a: { row: r, col: c }, b: { row: r, col: c + 1 } };
         }
       }
       // Try swap down
       if (r < rows - 1) {
+        // Special + special swap is always valid
+        if (hasSpecial(cell) && hasSpecial(board[r + 1]?.[c] ?? null)) {
+          return { a: { row: r, col: c }, b: { row: r + 1, col: c } };
+        }
         const swapped = swap(board, { row: r, col: c }, { row: r + 1, col: c });
         if (findMatches(swapped).length > 0) {
           return { a: { row: r, col: c }, b: { row: r + 1, col: c } };

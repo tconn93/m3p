@@ -9,7 +9,7 @@
     "runtime": null
   },
   "build": {
-    "buildCommand": "npx tsc --noEmit 2>&1 | head -20",
+    "buildCommand": "npx tsc --noEmit 2>&1 && echo \"BUILD OK\"",
     "testCommand": null,
     "lintCommand": null,
     "devCommand": null,
@@ -35,20 +35,50 @@
   "hotPaths": [
     {
       "path": "src/App.tsx",
-      "accessCount": 22,
-      "lastAccessed": 1783435868342,
+      "accessCount": 32,
+      "lastAccessed": 1783444222056,
       "type": "file"
     },
     {
       "path": "server/db.ts",
-      "accessCount": 12,
-      "lastAccessed": 1783434774500,
+      "accessCount": 16,
+      "lastAccessed": 1783444190887,
       "type": "file"
     },
     {
       "path": "src/App.css",
-      "accessCount": 12,
-      "lastAccessed": 1783435419032,
+      "accessCount": 15,
+      "lastAccessed": 1783440408426,
+      "type": "file"
+    },
+    {
+      "path": "src/components/ProfileModal.tsx",
+      "accessCount": 15,
+      "lastAccessed": 1783444255223,
+      "type": "file"
+    },
+    {
+      "path": "src/engine/game.ts",
+      "accessCount": 14,
+      "lastAccessed": 1783441738142,
+      "type": "file"
+    },
+    {
+      "path": "src/components/LoginScreen.tsx",
+      "accessCount": 11,
+      "lastAccessed": 1783444254899,
+      "type": "file"
+    },
+    {
+      "path": "server/routes.ts",
+      "accessCount": 9,
+      "lastAccessed": 1783444190554,
+      "type": "file"
+    },
+    {
+      "path": "server/index.ts",
+      "accessCount": 9,
+      "lastAccessed": 1783444303822,
       "type": "file"
     },
     {
@@ -58,51 +88,45 @@
       "type": "file"
     },
     {
-      "path": "src/engine/game.ts",
-      "accessCount": 8,
-      "lastAccessed": 1783435315411,
-      "type": "file"
-    },
-    {
-      "path": "server/index.ts",
-      "accessCount": 7,
-      "lastAccessed": 1783434773791,
-      "type": "file"
-    },
-    {
       "path": "src/components/Header.tsx",
-      "accessCount": 7,
-      "lastAccessed": 1783435860871,
+      "accessCount": 8,
+      "lastAccessed": 1783440887838,
+      "type": "file"
+    },
+    {
+      "path": "src/engine/levels.ts",
+      "accessCount": 8,
+      "lastAccessed": 1783441749447,
       "type": "file"
     },
     {
       "path": "src/components/Board.tsx",
-      "accessCount": 6,
-      "lastAccessed": 1783435338677,
+      "accessCount": 7,
+      "lastAccessed": 1783440887081,
       "type": "file"
     },
     {
       "path": "tsconfig.node.json",
-      "accessCount": 5,
-      "lastAccessed": 1783434616390,
-      "type": "file"
-    },
-    {
-      "path": "src/components/ProfileModal.tsx",
-      "accessCount": 5,
-      "lastAccessed": 1783434765125,
-      "type": "file"
-    },
-    {
-      "path": "server/routes.ts",
-      "accessCount": 5,
-      "lastAccessed": 1783434774132,
+      "accessCount": 6,
+      "lastAccessed": 1783440491483,
       "type": "file"
     },
     {
       "path": "src/components/Gem.tsx",
+      "accessCount": 6,
+      "lastAccessed": 1783440887498,
+      "type": "file"
+    },
+    {
+      "path": "package.json",
+      "accessCount": 6,
+      "lastAccessed": 1783444191239,
+      "type": "file"
+    },
+    {
+      "path": "src/main.tsx",
       "accessCount": 5,
-      "lastAccessed": 1783435334125,
+      "lastAccessed": 1783439433393,
       "type": "file"
     },
     {
@@ -112,39 +136,27 @@
       "type": "file"
     },
     {
-      "path": "src/engine/levels.ts",
-      "accessCount": 4,
-      "lastAccessed": 1783434759986,
-      "type": "file"
-    },
-    {
       "path": "src/components/ComboPopup.tsx",
       "accessCount": 4,
       "lastAccessed": 1783434764755,
       "type": "file"
     },
     {
-      "path": "src/main.tsx",
+      "path": "vite.config.ts",
       "accessCount": 4,
-      "lastAccessed": 1783434774838,
-      "type": "file"
-    },
-    {
-      "path": "package.json",
-      "accessCount": 4,
-      "lastAccessed": 1783434889793,
+      "lastAccessed": 1783444304041,
       "type": "file"
     },
     {
       "path": "tsconfig.json",
-      "accessCount": 2,
-      "lastAccessed": 1783434616035,
+      "accessCount": 3,
+      "lastAccessed": 1783440476904,
       "type": "file"
     },
     {
-      "path": "vite.config.ts",
-      "accessCount": 2,
-      "lastAccessed": 1783434616724,
+      "path": "apache2-proxy.conf",
+      "accessCount": 3,
+      "lastAccessed": 1783444336838,
       "type": "file"
     },
     {
@@ -157,12 +169,6 @@
       "path": ".env.example",
       "accessCount": 2,
       "lastAccessed": 1783434632763,
-      "type": "file"
-    },
-    {
-      "path": "src/components/LoginScreen.tsx",
-      "accessCount": 2,
-      "lastAccessed": 1783435843220,
       "type": "file"
     },
     {
@@ -193,6 +199,12 @@
       "path": "README.md",
       "accessCount": 1,
       "lastAccessed": 1783434633463,
+      "type": "file"
+    },
+    {
+      "path": "server/auth.ts",
+      "accessCount": 1,
+      "lastAccessed": 1783440349109,
       "type": "file"
     }
   ],
